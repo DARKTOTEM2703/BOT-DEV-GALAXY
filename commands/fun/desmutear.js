@@ -3,7 +3,7 @@ const { SlashCommandBuilder, ChannelType } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('desmutear')
-    .setDescription('Mutea a todos los miembros en un canal de voz, excepto el rol de STAFF')
+    .setDescription('Desmutea a todos los miembros en un canal de voz, excepto el rol de STAFF')
     .addChannelOption((option) =>
       option.setName('canal')
         .setDescription('El canal de voz en el que se aplicará el mute')
