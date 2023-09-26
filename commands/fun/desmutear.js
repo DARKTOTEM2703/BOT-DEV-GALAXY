@@ -3,10 +3,10 @@ const { SlashCommandBuilder, ChannelType } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('desmutear')
-    .setDescription('Desmutea a todos los miembros en un canal de voz, excepto el rol de STAFF')
+    .setDescription('Desmutea a todos los miembros en un canal de voz, excepto el rol de Staff')
     .addChannelOption((option) =>
       option.setName('canal')
-        .setDescription('El canal de voz en el que se aplicará el mute')
+        .setDescription('El canal de voz en el que se aplicará el desmuteo')
         .setRequired(true)
     ),
   async execute(interaction) {
@@ -20,7 +20,7 @@ module.exports = {
     const staffRole = interaction.guild.roles.cache.find((r) => r.name === 'Staff');
 
     if (!staffRole) {
-      return interaction.reply('El rol de hablantes no se encontró en el servidor.');
+      return interaction.reply('El rol de Staff no se encontró en el servidor.');
     }
 
     const voiceChannel = channelOption;
@@ -37,6 +37,6 @@ module.exports = {
       }
     });
 
-    return interaction.reply(`Muteados todos los miembros en el canal de voz "${voiceChannel.name}", excepto el rol de hablantes.`);
+    return interaction.reply(`Desmuteados todos los miembros en el canal de voz "${voiceChannel.name}", excepto el rol de Staff.`);
   },
 };
