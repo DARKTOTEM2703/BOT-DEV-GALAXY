@@ -1,0 +1,14 @@
+const { Events } = require('discord.js');
+
+module.exports = {
+	name: Events.GuildMemberAdd,
+	async execute(member) {
+		// Reemplaza 'CANAL_DE_BIENVENIDA_ID' con el ID del canal de bienvenida
+		const channel = member.guild.channels.cache.get('1153455874262708266');
+
+		if (!channel) return;
+
+		// Envía un mensaje de bienvenida
+		channel.send(`¡Bienvenido a nuestro servidor, ${member}!`);
+	},
+};
