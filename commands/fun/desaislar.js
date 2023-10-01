@@ -1,32 +1,58 @@
-const { SlashCommandBuilder, Permissions } = require('discord.js');
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('desaislar')
-    .setDescription('Quitar el aislamiento temporal de un miembro.')
-    .addUserOption(option =>
+    .setName("desaislar")
+    .setDescription("Desaislar a un miembro del servidor.")
+    .addUserOption((option) =>
       option
-        .setName('objetivo')
-        .setDescription('El miembro al que se le quitará el aislamiento.')
-        .setRequired(true)),
+        .setName("objetivo")
+        .setDescription("El miembro que se desaislará.")
+        .setRequired(true)
+    ),
   async execute(interaction) {
     const { options, guild } = interaction;
-    const objetivo = options.getMember('objetivo');
+    const objetivo = options.getMember("objetivo");
 
-    // Verificar si el miembro que ejecuta el comando tiene permisos de Banear Miembros.
+    // Verificar si el miembro que ejecuta el comando tiene el rol "hablantes".
     const autor = interaction.member;
-    if (!autor.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-      await interaction.reply({ content: 'No tienes permisos para quitar el aislamiento a un miembro.', ephemeral: true });
+    const rolHablantes = guild.roles.cache.find(
+      (rol) => rol.name === "hablantes"
+    );
+
+    if (!rolHablantes || !autor.roles.cache.has(rolHablantes.id)) {
+      await interaction.reply({
+        content:
+          "Solo los miembros con el rol 'hablantes' pueden desaislar a otros miembros.",
+        ephemeral: true,
+      });
       return;
     }
 
-    // Intentar desaislar al miembro objetivo utilizando el ID del usuario.
-    try {
-      await guild.members.unban(objetivo.user.id);
-      interaction.reply({ content: `Se quitó el aislamiento de ${objetivo.displayName}.`, ephemeral: false });
-    } catch (error) {
-      console.error(error);
-      interaction.reply({ content: 'Ocurrió un error al quitar el aislamiento del miembro.', ephemeral: false });
+    // Verificar si el miembro objetivo está aislado.
+    if (!objetivo.timeout) {
+      await interaction.reply({
+        content: `${objetivo.displayName} no está aislado.`,
+        ephemeral: true,
+      });
+      return;
     }
+
+    // Desaislar al miembro.
+    objetivo
+      .timeout(0)
+      .then(() => {
+        interaction.reply({
+          content: `Se desaisló a ${objetivo.displayName}.`,
+          ephemeral: true,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        interaction.reply({
+          content: "Ocurrió un error al desaislar al miembro.",
+          ephemeral: true,
+        });
+      });
   },
 };

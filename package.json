@@ -8,5 +8,10 @@
     "mongodb": "^6.1.0",
     "mongoose": "^7.5.2",
     "ytdl-core": "^4.11.5"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "commands" : "node ./deploy-commands.js"
   }
 }
