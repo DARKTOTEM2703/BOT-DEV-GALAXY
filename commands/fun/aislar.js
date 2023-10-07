@@ -43,7 +43,8 @@ module.exports = {
 
     // Verificar si el miembro que ejecuta el comando tiene permisos suficientes para aislar a otro miembro.
     const autor = interaction.member;
-    if (!autor.permissions.has(PermissionFlagsBits.BanMembers)) {
+    if (!autor.permissions.has(PermissionFlagsBits.BanMembers)) 
+    {
       await interaction.reply({
         content: "No tienes permisos para aislar a un miembro.",
         ephemeral: true,
@@ -55,9 +56,7 @@ module.exports = {
     const miembroObjetivo = guild.members.cache.get(objetivo.id);
 
     // Calcular el tiempo en milisegundos.
-    let tiempoEnMilisegundos;
-    if (tiempo === "custom" && tiempoPersonalizado) {
-      tiempoEnMilisegundos = parseInt(tiempoPersonalizado) * 1000;
+    let tiempoEnMilisegundos;if (tiempo === "custom" && tiempoPersonalizado) {tiempoEnMilisegundos = parseInt(tiempoPersonalizado) * 1000;
     } else {
       tiempoEnMilisegundos = parseTiempo(tiempo);
     }
